@@ -1,244 +1,32 @@
-const CATS = {
-  gory:{n:'Горы', c:'#A9E34B'},
-  voda:{n:'Вода', c:'#39D6D0'},
-  strannoe:{n:'Необычное', c:'#FFB84D'},
-  eda:{n:'Еда', c:'#FF5470'},
-};
-const PLACES = [
- {id:'metallurg', n:'Зона отдыха «Металлург»', cat:'voda', real:true, ver:'5 сент', photo:'assets/metallurg.jpg', lat:41.612463, lon:70.000463, km:'~95 км', drive:'1,5–2 ч', walk:'нет', sez:'май–сент пляж, виды весь год',
-  d:'Зона отдыха на берегу Чарвака, 1275 м над морем, в Угам-Чаткальской заповедной зоне. Панорамный вид на водохранилище и отроги Тянь-Шаня, пляж с пирсом, открытый летний бассейн, беседки под деревьями. Территория 12 гектаров.',
-  rows:[['Вход','платный: от 50–100 тыс сум, может быть выше'],['Формат','зона отдыха: пляж, бассейн, беседки'],['Дорога','асфальт до Чарвака'],['Кому','семьи, компании, спокойный отдых'],['График','ежедневно 10:00–19:00']]},
- {id:'chimyon', n:'Чимён (Chimyon)', cat:'gory', real:true, ver:'5 сент', photo:'assets/chimyon.jpg', lat:41.517232, lon:69.969141, km:'~80 км', drive:'1,5 ч', walk:'по желанию', sez:'весь год',
-  d:'Горная локация в Бостанлыкском районе, предгорья Чимгана. Топ-точка для съёмок: реклама машины в кадре, видео, фотосессии — фактура гор без долгой дороги.',
-  rows:[['Чем хорош','съёмки: авто в кадре, видео, фото'],['Дорога','асфальт, Бостанлыкский район'],['Кадр','дорога-серпантин прямо на Большой Чимган']]},
-];
-
-const $ = id => document.getElementById(id);
-const yandexTo = (lat,lon) => `https://yandex.uz/maps/?rtext=~${lat},${lon}&rtt=auto`;
-const googleTo = (lat,lon) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving`;
-
-const SCREENS = ['scr-trips','scr-places','scr-place','scr-saved','scr-profile','scr-feedback','scr-suggest'];
-let current='scr-trips', backTo='scr-trips', activeCat='all', curPlace=null;
-const SAVED_KEY='yashirin.saved.v1';
-function loadSaved(){
-  try{
-    const raw=JSON.parse(localStorage.getItem(SAVED_KEY)||'[]');
-    return new Set(Array.isArray(raw)?raw.filter(id=>PLACES.some(p=>p.id===id)):[]);
-  }catch(e){ return new Set(); }
-}
-const saved = loadSaved();
-function persistSaved(){
-  try{ localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); }catch(e){}
-}
-
-/* дизайн-акценты */
-const SHORT = {metallurg:'«Металлург»', chimyon:'Чимён'};
-const POETIC = {metallurg:'берег Чарвака, 1275 м', chimyon:'серпантин на Большой Чимган'};
-{ const h = new Date().getHours();
-  const g = h<5?'Не спится':h<11?'Доброе утро':h<17?'Добрый день':'Добрый вечер';
-  const greet=$('greet'); greet.textContent=g+', ';
-  const em=document.createElement('em'); em.textContent='куда едем?'; greet.appendChild(em); }
-
-function show(id){
-  SCREENS.forEach(s => { $(s).hidden = (s !== id); });
-  current = id;
-  const tabOf = {'scr-trips':'trips','scr-places':'places','scr-place':'places','scr-saved':'profile','scr-profile':'profile','scr-feedback':'profile','scr-suggest':'suggest'}[id];
-  document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === tabOf));
-  if(window.moveInd) moveInd();
-}
-document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
-  show({trips:'scr-trips',places:'scr-places',suggest:'scr-suggest',profile:'scr-profile'}[b.dataset.tab]);
-}));
-document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show(backTo)));
-
-let toastTimer=null;
-function toast(msg){
-  const t=$('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>{t.classList.remove('show');},2200);
-}
-
-const EXTERNAL_HOSTS=new Set(['t.me','yandex.uz','www.google.com','www.instagram.com']);
-function openExternal(url){
-  try{
-    const u=new URL(url, location.href);
-    if(u.protocol!=='https:' || !EXTERNAL_HOSTS.has(u.hostname)) throw new Error('External host is not allowed');
-    const a=document.createElement('a');
-    a.href=u.href; a.target='_blank'; a.rel='noopener noreferrer'; a.referrerPolicy='no-referrer';
-    document.body.appendChild(a); a.click(); a.remove();
-  }catch(e){ toast('Не удалось открыть ссылку'); }
-}
-async function copyText(text){
-  try{
-    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; }
-  }catch(e){}
-  try{
-    const ta=document.createElement('textarea');
-    ta.value=text; ta.setAttribute('readonly','');
-    ta.className='clipboard-fallback';
-    document.body.appendChild(ta); ta.select();
-    const ok=document.execCommand('copy'); ta.remove(); return ok;
-  }catch(e){ return false; }
-}
-
-/* анонс первого выезда */
-{ const ch = PLACES.find(p=>p.id==='chimyon');
-  if(ch && ch.photo) $('annimg').src = ch.photo; }
-$('annbtn').addEventListener('click', () => {
-  const msg='Хочу в первый выезд YASHIRIN. Пришлите дату, точку старта и условия участия.';
-  copyText(msg).then(copied=>toast(copied?'Сообщение скопировано':'Открыл Telegram — напиши про первый выезд'));
-  openExternal('https://t.me/yunusovprod');
+'use strict';
+const Y=window.Yashirin,$=id=>document.getElementById(id);let storage;try{storage=window.localStorage;}catch{storage=null;}
+let saved=Y.readSaved(storage),category='all',selected=null,previousView='places',toastTimer;
+function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
+function notify(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4000);}
+function saveButton(p){const b=node('button','save-small',saved.has(p.id)?'♥':'♡');b.type='button';b.dataset.save=p.id;b.setAttribute('aria-pressed',String(saved.has(p.id)));b.setAttribute('aria-label',(saved.has(p.id)?'Убрать из сохранённого: ':'Сохранить: ')+p.name);b.addEventListener('click',()=>toggleSave(p.id));return b;}
+function card(p){const a=node('article','place-card'),cover=node('a','card-cover');cover.href=`#/place/${p.id}`;cover.setAttribute('aria-label',`Подробнее: ${p.name}`);const img=node('img');img.src=p.image;img.alt=p.alt;img.width=640;img.height=400;img.decoding='async';cover.append(img);const body=node('div','card-content'),label=node('div','card-label');label.append(node('span','',`${p.categoryName} · ${p.location}`),node('span','card-visited','✓ Были лично'));const h=node('h2'),title=node('a','',p.name);title.href=cover.href;h.append(title);const actions=node('div','card-actions'),open=node('a','card-open','Посмотреть место');open.href=cover.href;open.append(node('span','','→'));actions.append(open,saveButton(p));body.append(label,h,node('p','card-summary',p.summary),actions);a.append(cover,body);return a;}
+function renderLists(){const list=Y.filtered(category);$('place-list').replaceChildren(...list.map(card));$('result-count').textContent=list.length===1?'1 место':`${list.length} места`;const chosen=Y.filtered('all',saved);$('saved-list').replaceChildren(...chosen.map(card));$('saved-empty').hidden=chosen.length>0;$('saved-count').textContent=String(chosen.length);}
+function syncSave(){if(!selected)return;const on=saved.has(selected.id);$('save-place').textContent=on?'♥ Сохранено':'♡ Сохранить место';$('save-place').setAttribute('aria-pressed',String(on));}
+function toggleSave(id){const remove=saved.has(id);if(remove)saved.delete(id);else saved.add(id);const persisted=Y.writeSaved(storage,saved);renderLists();syncSave();const focused=document.querySelector(`#view-${Y.route(location.hash).view} [data-save="${id}"]`);if(focused)focused.focus({preventScroll:true});notify(persisted?(remove?'Убрано из сохранённого':'Сохранено в этом браузере'):'Изменение действует до закрытия страницы: браузер не разрешил сохранить список.');$('storage-note').textContent=persisted?'Сохранённое останется в этом браузере.':'Браузер не разрешил сохранение. Список действует до закрытия страницы.';}
+function renderPlace(id){selected=Y.places.find(p=>p.id===id);const p=selected,maps=Y.mapLinks(p);$('place-name').textContent=p.name;$('place-category').textContent=`${p.categoryName} · ${p.location}`;$('place-image').src=p.image;$('place-image').alt=p.alt;$('place-description').textContent=p.description;$('place-reason').textContent=p.reason;$('place-facts').replaceChildren(...p.facts.map(([k,v])=>{const row=node('div');row.append(node('dt','',k),node('dd','',v));return row;}));$('place-map').href=maps.yandex;$('yandex-map').href=maps.yandex;$('google-map').href=maps.google;$('coordinates').textContent=`Координаты: ${p.lat}, ${p.lon}`;$('place-feedback').href=`#/feedback?place=${p.id}`;$('detail-back').href=previousView==='saved'?'#/saved':'#/';$('detail-back').textContent=previousView==='saved'?'← Сохранённое':'← Все места';syncSave();}
+function renderRoute(){const r=Y.route(location.hash);document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!==`view-${r.view}`);document.querySelectorAll('[data-nav]').forEach(a=>{const active=a.dataset.nav===(r.view==='place'?'places':r.view);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});if(r.view==='place')renderPlace(r.id);else previousView=r.view;if(r.view==='saved')renderLists();if(r.view==='feedback'&&r.place)$('feedback-place').value=r.place;const names={places:'Места, о которых мало говорят',saved:'Сохранённое',about:'О проекте',feedback:'Обратная связь',suggest:'Предложить место','not-found':'Страница не найдена'};document.title=`${r.view==='place'?selected.name:names[r.view]} — Yashirin`;window.scrollTo({top:0,behavior:'instant'});$('main').focus({preventScroll:true});}
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{category=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderLists();}));$('save-place').addEventListener('click',()=>{if(selected)toggleSave(selected.id);});
+async function copy(text){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true;}}catch{}return false;}
+$('share-place').addEventListener('click',async()=>{if(!selected)return;const title=selected.name,url=Y.placeURL(location.href,selected.id);if(navigator.share){try{await navigator.share({title:`${title} — Yashirin`,url});return;}catch(e){if(e.name==='AbortError')return;}}if(await copy(url)){notify('Ссылка на место скопирована');return;}window.prompt('Скопируйте ссылку на место:',url);});
+function output(id,message){const box=$(id);box.replaceChildren();box.hidden=false;const title=node('h2','','Сообщение готово'),intro=node('p','','Скопируйте текст, откройте Telegram и отправьте автору.');const area=node('textarea');area.readOnly=true;area.value=message;area.setAttribute('aria-label','Текст сообщения для Telegram');const row=node('div','action-row'),copyButton=node('button','button primary','Скопировать текст');copyButton.type='button';copyButton.addEventListener('click',async()=>{if(await copy(message)){notify('Текст скопирован. Теперь откройте Telegram.');copyButton.textContent='Скопировано';}else{area.focus();area.select();notify('Выделили текст — скопируйте его вручную.');}});const link=node('a','button secondary','Открыть Telegram ↗');link.href='https://t.me/yunusovprod';link.target='_blank';link.rel='noopener noreferrer';row.append(copyButton,link);box.append(title,intro,area,row,node('p','small','Сообщение пока не отправлено. На сайте оно не сохраняется.'));box.scrollIntoView({behavior:'instant',block:'nearest'});area.focus({preventScroll:true});}
+$('feedback-form').addEventListener('submit',e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;const p=Y.places.find(p=>p.id===$('feedback-place').value);output('feedback-output',`Отзыв о Yashirin\nЧто успел(а): ${$('feedback-result').value}\nМесто: ${p?p.name:'Сайт в целом'}\nВпечатление: ${$('feedback-text').value.trim()}`);});
+$('suggest-form').addEventListener('submit',e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;output('suggest-output',`Находка для Yashirin\nНазвание: ${$('suggest-name').value.trim()}\nГде: ${$('suggest-location').value.trim()}\nЧто интересного: ${$('suggest-reason').value.trim()}`);});
+document.querySelector('.skip').addEventListener('click',e=>{e.preventDefault();$('main').focus();});
+document.querySelectorAll('.form input,.form textarea').forEach(field=>{
+  field.addEventListener('input',()=>field.setCustomValidity(''));
+  field.addEventListener('change',()=>{field.value=field.value.trim();field.setCustomValidity(field.required&&field.value.length<field.minLength?'Добавьте, пожалуйста, несколько слов.':'');});
 });
-$('annplaces').addEventListener('click', ()=>show('scr-places'));
-
-/* места: легенда-фильтр + список */
-const DOT_CLASS={'#A9E34B':'dot-gory','#39D6D0':'dot-voda','#FFB84D':'dot-amber','#FF5470':'dot-red','#8D8DA6':'dot-soft'};
-function dot(color, className='dot'){
-  const s=document.createElement('span'); s.className=`${className} ${DOT_CLASS[color]||'dot-soft'}`; return s;
-}
-function textEl(tag, className, text){
-  const e=document.createElement(tag); if(className) e.className=className; e.textContent=text; return e;
-}
-const legend = $('legend');
-[['all','Все','#8D8DA6'], ...Object.entries(CATS).map(([k,v])=>[k,v.n,v.c])].forEach(([k,label,color])=>{
-  const b=document.createElement('button');
-  b.dataset.cat=k; b.className=k==='all'?'on':'';
-  b.append(dot(color), document.createTextNode(label));
-  b.addEventListener('click',()=>{ activeCat=k; legend.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.cat===k)); renderPlaces(); });
-  legend.appendChild(b);
-});
-$('ymall').href='https://yandex.uz/maps/?ll=69.62,41.42&z=9&pt='+PLACES.map(p=>`${p.lon},${p.lat},pm2gnm`).join('~');
-
-function itemEl(p, sub){
-  const el=document.createElement('button'); el.className='item';
-  const body=document.createElement('span');
-  const title=textEl('span','t',p.n);
-  if(p.real){ const tag=textEl('span','verified-tag',' ✓ проверено'); title.appendChild(tag); }
-  const desc=textEl('span','s',sub);
-  body.append(title,desc);
-  el.append(dot(CATS[p.cat].c),body,textEl('span','km',p.km));
-  return el;
-}
-function renderPlaces(){
-  const list=$('placelist'); list.replaceChildren();
-  PLACES.filter(p=>activeCat==='all'||p.cat===activeCat).forEach(p=>{
-    const el=document.createElement('button'); el.className='pcard'; el.type='button';
-    if(p.photo){ const img=document.createElement('img'); img.src=p.photo; img.alt=`${SHORT[p.id]||p.n} — фото места`; img.loading='lazy'; img.decoding='async'; el.appendChild(img); }
-    el.appendChild(textEl('div','grad',''));
-    if(p.real) el.appendChild(textEl('span','chip','✓ проверено'+(p.ver?' · '+p.ver:'')));
-    const inside=textEl('div','in','');
-    inside.appendChild(textEl('div','nm',SHORT[p.id]||p.n));
-    if(POETIC[p.id]) inside.appendChild(textEl('div','pn',POETIC[p.id]));
-    const line=textEl('div','ln',''); line.append(dot(CATS[p.cat].c),document.createTextNode(`${CATS[p.cat].n} · ${p.km} из Ташкента · ${p.drive}`));
-    inside.appendChild(line); el.appendChild(inside);
-    el.addEventListener('click',()=>openPlace(p.id,'scr-places'));
-    list.appendChild(el);
-  });
-  const add=document.createElement('button'); add.className='pcard addcard'; add.type='button';
-  add.append(textEl('div','plus','+'),textEl('div','nm2','Предложи место'),textEl('div','sub2','знаешь точку — после проверки она появится здесь с твоим именем'));
-  add.addEventListener('click',()=>show('scr-suggest'));
-  list.appendChild(add);
-}
-renderPlaces();
-
-function openPlace(id, from){
-  const p = PLACES.find(x=>x.id===id); if(!p) return; curPlace=p; backTo=from;
-  if(p.photo){ $('pheroimg').src=p.photo; $('pheroimg').alt=`${p.n} — фото места`; $('phero').hidden=false; } else { $('phero').hidden=true; }
-  const cat=$('pcat'); cat.replaceChildren(); cat.append(dot(CATS[p.cat].c),document.createTextNode(CATS[p.cat].n+' · '));
-  const status=textEl('span',p.real?'verified-tag':'','');
-  status.textContent=p.real?`проверено${p.ver?' '+p.ver:''} · точка №${PLACES.filter(x=>x.real).findIndex(x=>x.id===p.id)+1}`:'ещё не проверено командой';
-  cat.appendChild(status);
-  $('pname').textContent=p.n;
-  const po=POETIC[p.id]; $('psub').hidden=!po; $('psub').textContent=po||'';
-  const meta=$('pmeta'); meta.replaceChildren();
-  const parts=[
-    [p.km,' от Ташкента · в пути '],[p.drive,' · пешком '],[p.walk,' · сезон '],[p.sez,'']
+window.addEventListener('hashchange',renderRoute);window.addEventListener('storage',e=>{if(e.key===Y.key){saved=Y.readSaved(storage);renderLists();syncSave();}});renderLists();renderRoute();
+if(document.modelContext?.registerTool){
+  const controller=new AbortController();window.addEventListener('pagehide',()=>controller.abort(),{once:true});
+  const registry=[
+    {name:'list_yashirin_places',description:'List available places and their saved state in this browser.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(){return Y.places.map(p=>({id:p.id,name:p.name,description:p.description,saved:saved.has(p.id),url:Y.placeURL(location.href,p.id)}));}},
+    {name:'set_yashirin_saved',description:'Save or remove an existing place in this browser and update the visible saved list.',inputSchema:{type:'object',properties:{id:{type:'string',enum:Y.places.map(p=>p.id)},saved:{type:'boolean'}},required:['id','saved'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input.saved!=='boolean'||!Y.places.some(p=>p.id===input.id))throw new Error('Unknown place or invalid saved value');if(saved.has(input.id)!==input.saved)toggleSave(input.id);return{id:input.id,saved:saved.has(input.id)};}}
   ];
-  parts.forEach(([bold,tail])=>{ const b=document.createElement('b'); b.textContent=bold; meta.append(b,document.createTextNode(tail)); });
-  $('pdesc').textContent=p.d;
-  const rows=$('prows'); rows.replaceChildren();
-  p.rows.forEach(([k,v])=>{ const r=textEl('div','r',''); r.append(textEl('span','k',k),textEl('span','v',v)); rows.appendChild(r); });
-  $('pyandex').href=yandexTo(p.lat,p.lon);
-  $('pgoogle').href=googleTo(p.lat,p.lon);
-  $('pcoord').textContent = p.real
-    ? `точка на карте: ${p.lat}, ${p.lon}`
-    : `ориентировочная точка: ${p.lat}, ${p.lon} · уточняется проверочным выездом`;
-  const sb=$('saveplace');
-  sb.classList.toggle('on',saved.has(p.id));
-  sb.textContent=saved.has(p.id)?'♥ Сохранено':'♡ Сохранить';
-  show('scr-place');
-  $('scr-place').scrollTop=0;
+  registry.forEach(tool=>{try{Promise.resolve(document.modelContext.registerTool(tool,{signal:controller.signal})).catch(()=>{});}catch{}});
 }
-$('saveplace').addEventListener('click',()=>{
-  if(!curPlace) return;
-  if(saved.has(curPlace.id)){ saved.delete(curPlace.id); toast('Убрано из сохранённого'); }
-  else { saved.add(curPlace.id); toast('Сохранено на этом устройстве'); }
-  persistSaved();
-  const sb=$('saveplace');
-  sb.classList.toggle('on',saved.has(curPlace.id));
-  sb.textContent=saved.has(curPlace.id)?'♥ Сохранено':'♡ Сохранить';
-});
-
-/* сохранённое */
-$('openSaved').addEventListener('click',()=>{ backTo='scr-profile'; renderSaved(); show('scr-saved'); });
-function renderSaved(){
-  const list=$('savedlist'); list.replaceChildren();
-  const items=[...saved].map(id=>PLACES.find(p=>p.id===id));
-  $('savedempty').hidden = items.length>0;
-  items.forEach(p=>{
-    const el=itemEl(p, `в пути ${p.drive} · пешком ${p.walk} · ${p.sez}`);
-    el.addEventListener('click',()=>openPlace(p.id,'scr-saved'));
-    list.appendChild(el);
-  });
-}
-
-/* бета-отзыв */
-function openFeedback(){ backTo = current==='scr-feedback' ? backTo : current; show('scr-feedback'); }
-$('betabtn').addEventListener('click',openFeedback);
-$('openFeedback').addEventListener('click',()=>{ backTo='scr-profile'; show('scr-feedback'); });
-$('feedbackForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  if(!e.currentTarget.reportValidity()) return;
-  const msg = `Бета-отзыв YASHIRIN:
-1) Последняя поездка и выбор места: ${$('fq1').value.trim()}
-2) Что непонятно/мешает: ${$('fq2').value.trim()}
-3) Не хватает перед выездом: ${$('fq3').value.trim()}
-4) Причина вернуться: ${$('fq4').value}`;
-  copyText(msg).then(copied=>{
-    const out=$('fout'); out.hidden=false;
-    out.textContent=(copied?'Ответы скопированы. Вставь их в Telegram и отправь.':'Не удалось скопировать автоматически. Скопируй текст ниже вручную:')+'\n\n'+msg;
-    toast(copied?'Ответы скопированы':'Скопируй ответы ниже');
-  });
-  openExternal('https://t.me/yunusovprod');
-});
-
-/* предложить место */
-$('suggestForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  if(!e.currentTarget.reportValidity()) return;
-  const msg = `Предлагаю место для YASHIRIN:
-Название: ${$('sq1').value.trim()}
-Где: ${$('sq2').value.trim()}
-Почему стоит ехать: ${$('sq3').value.trim()}`;
-  copyText(msg).then(copied=>{
-    const out=$('sout'); out.hidden=false;
-    out.textContent=(copied?'Описание скопировано. Вставь его в Telegram и отправь.':'Не удалось скопировать автоматически. Скопируй текст ниже вручную:')+'\n\n'+msg;
-    toast(copied?'Описание скопировано':'Скопируй текст ниже');
-  });
-  openExternal('https://t.me/yunusovprod');
-});
-
-/* динамичный индикатор таб-бара */
-window.moveInd = function(){
-  const bar=document.getElementById('tabs'), ind=document.getElementById('tabind');
-  if(!bar||!ind) return;
-  const b=bar.querySelector('button.on'); if(!b) return;
-  const br=b.getBoundingClientRect(), wr=bar.getBoundingClientRect();
-  if(wr.width===0) return;
-  const cx=br.left-wr.left+br.width/2;
-  ind.style.transform=`translateX(${cx-26}px)`;
-  bar.style.setProperty('--nx', ((cx/wr.width)*100).toFixed(2)+'%');
-  const svg=b.querySelector('svg');
-  if(svg) ind.innerHTML=svg.outerHTML;
-};
-setTimeout(moveInd, 60);
-window.addEventListener('resize', moveInd);

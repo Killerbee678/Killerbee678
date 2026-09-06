@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131324">
+<meta name="description" content="Проверенные места и автомобильные маршруты по Узбекистану: как доехать, состояние дороги и выезды из Ташкента.">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<title>Yashirin — настоящий Узбекистан на машине</title>
+<meta property="og:title" content="Yashirin — настоящий Узбекистан на машине">
+<meta property="og:description" content="Проверенные места и выезды из Ташкента, куда реально доехать на обычной машине.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📍</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Golos+Text:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+
+<header class="hdr">
+  <div>
+    <div class="brand">YASHIRIN<em>.</em></div>
+    <div class="sub">настоящий Узбекистан на машине</div>
+  </div>
+  <nav class="topnav" id="topnav">
+    <button data-tab="trips" class="on">Выезды</button>
+    <button data-tab="places">Места</button>
+    <button data-tab="suggest">Предложить</button>
+    <button data-tab="profile">Профиль</button>
+  </nav>
+  <button class="beta" id="betabtn">БЕТА · отзыв</button>
+</header>
+
+<div class="stage">
+
+  <!-- TRIPS -->
+  <div class="screen" id="scr-trips">
+    <div class="greet" id="greet"></div>
+    <div class="ann">
+      <div class="ph"><img id="annimg" alt=""><span class="tag">АНОНС</span></div>
+      <div class="bd">
+        <div class="t1">Первый выезд · набор участников</div>
+        <div class="t2">Чарвак-день: Чимён + «Металлург»</div>
+        <div class="t3"><b>~200 км из Ташкента</b> · до 5 машин · маршрут проверен<br><span class="micro">Дату, точку старта и условия пришлём после заявки.</span></div>
+        <div class="btnrow">
+          <button class="btn primary" id="annbtn">Записаться в Telegram</button>
+          <button class="btn ghost" id="annplaces">Смотреть места</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLACES -->
+  <div class="screen" id="scr-places" hidden>
+    <div class="legend" id="legend"></div>
+    <a class="ymrow" id="ymall" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"><span>Открыть все точки в <b>Яндекс.Картах</b></span><span class="go">↗</span></a>
+    <div class="pgrid" id="placelist"></div>
+  </div>
+
+  <!-- PLACE -->
+  <div class="screen" id="scr-place" hidden>
+    <div class="backrow"><button class="iconbtn" data-back>‹ Назад</button><button class="iconbtn savebtn" id="saveplace">♡ Сохранить</button></div>
+    <div class="phero" id="phero" hidden><img id="pheroimg" alt=""></div>
+    <div class="catline" id="pcat"></div>
+    <h2 class="pt" id="pname"></h2>
+    <div class="psub" id="psub" hidden></div>
+    <div class="metaline" id="pmeta"></div>
+    <p class="desc" id="pdesc"></p>
+    <div class="rows" id="prows"></div>
+    <a class="btn primary" id="pyandex" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Маршрут в Яндекс.Картах</a>
+    <a class="btn ghost" id="pgoogle" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Маршрут в Google Maps</a>
+    <a class="linkrow" href="https://t.me/Rentmotors_uz" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"><span>Машина под маршрут<span class="sub">Rent Motors · −10% по промокоду YASHIRIN10</span></span><span class="go">›</span></a>
+    <a class="linkrow" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"><span>Вопросы по месту<span class="sub">Telegram автора — отвечу лично</span></span><span class="go">›</span></a>
+    <div class="coordnote" id="pcoord"></div>
+    <div class="travelnote">Перед выездом проверьте погоду, режим работы локации и состояние дороги — они могут меняться.</div>
+  </div>
+
+  <!-- SUGGEST -->
+  <div class="screen" id="scr-suggest" hidden>
+    <div class="sect"><b>Предложи место</b></div>
+    <form class="fform" id="suggestForm">
+      <div><label for="sq1">Как называется место?</label><input id="sq1" required maxlength="100" autocomplete="off" placeholder="например: водопад за Хумсаном"></div>
+      <div><label for="sq2">Где это? Ссылка на карту или как доехать</label><textarea id="sq2" required maxlength="500" rows="2" placeholder="ссылка из Яндекс.Карт или словами"></textarea></div>
+      <div><label for="sq3">Почему туда стоит ехать?</label><textarea id="sq3" required maxlength="500" rows="2" placeholder="вид, еда, история, дорога, что важно знать…"></textarea></div>
+      <button class="btn primary" id="ssend" type="submit">Предложить место</button>
+      <div class="fout" id="sout" hidden></div>
+    </form>
+  </div>
+
+  <!-- SAVED -->
+  <div class="screen" id="scr-saved" hidden>
+    <div class="backrow"><button class="iconbtn" data-back>‹ Профиль</button></div>
+    <div class="sect"><b>Сохранённое</b></div>
+    <div class="listwrap" id="savedlist"></div>
+    <div class="empty" id="savedempty">Пока пусто. Открой место и нажми «Сохранить».</div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen" id="scr-profile" hidden>
+    <div class="ucard"><div class="ava">Т</div><div><div class="profile-name">Ты · гость беты</div><div class="profile-sub">Сохранения хранятся только на этом устройстве</div></div></div>
+    <button class="linkrow" id="openSaved"><span>Сохранённое<span class="sub">места, которые ты отметил</span></span><span class="go">›</span></button>
+    <a class="linkrow" href="https://www.instagram.com/travelguide2711" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"><span>@travelguide2711<span class="sub">Reels автора с проверенных точек</span></span><span class="go">›</span></a>
+    <button class="linkrow" id="openFeedback"><span class="feedback-accent">Оставить отзыв о бете<span class="sub">4 вопроса · 2 минуты</span></span><span class="go">›</span></button>
+    <div class="promo">
+      <div class="code">YASHIRIN10</div>
+      <div class="d">−10% на аренду в Rent Motors</div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="screen" id="scr-feedback" hidden>
+    <div class="backrow"><button class="iconbtn" data-back>‹ Назад</button></div>
+    <div class="sect"><b>Бета-отзыв</b> · 2 минуты</div>
+    <form class="fform" id="feedbackForm">
+      <div>
+        <label for="fq1">1 · Когда ты в последний раз ездил(а) за город и как выбирал(а) место?</label>
+        <textarea id="fq1" required maxlength="600" rows="2" placeholder="например: две недели назад, искал в Instagram и Яндекс.Картах"></textarea>
+      </div>
+      <div>
+        <label for="fq2">2 · Что на YASHIRIN сейчас непонятно или мешает выбрать поездку?</label>
+        <textarea id="fq2" required maxlength="600" rows="2" placeholder="что именно пришлось угадывать или искать самому"></textarea>
+      </div>
+      <div>
+        <label for="fq3">3 · Какой информации не хватает перед реальным выездом?</label>
+        <textarea id="fq3" required maxlength="600" rows="2" placeholder="дорога, цена, связь, парковка, погода, время, машина…"></textarea>
+      </div>
+      <div>
+        <label for="fq4">4 · Ради чего ты бы вернулся(ась) сюда ещё раз?</label>
+        <select id="fq4" required>
+          <option value="">— выбери —</option>
+          <option>Искать новые места</option>
+          <option>Проверять состояние дороги</option>
+          <option>Записываться на совместные выезды</option>
+          <option>Хранить свои маршруты</option>
+          <option>Пока не вижу причины возвращаться</option>
+        </select>
+      </div>
+      <button class="btn primary" id="fsend" type="submit">Отправить отзыв</button>
+      <div class="fout" id="fout" hidden></div>
+      <div class="foot-note">Ответы копируются локально и открывается Telegram. На сайте они не сохраняются.</div>
+    </form>
+  </div>
+
+</div>
+
+<div class="tabwrap"><div class="tabs" id="tabs">
+  <button data-tab="trips" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Выезды</button>
+  <button data-tab="places"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Места</button>
+  <button data-tab="suggest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Предложить</button>
+  <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Профиль</button>
+</div>
+<div class="tabind" id="tabind"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+
+
+
+<script src="app.js" defer></script>
+</body>
+</html>

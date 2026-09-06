@@ -1,0 +1,1 @@
+{"name":"yashirin","private":true,"version":"0.1.0","scripts":{"dev":"node scripts/dev.cjs","build":"node scripts/build.cjs","test":"node --test tests/core.test.cjs"}}
