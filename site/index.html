@@ -1,12 +1,234 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#111317"><meta name="description" content="Места Узбекистана, о которых мало говорят. Личные находки, фотографии и полезные детали для посещения."><meta property="og:type" content="website"><meta property="og:title" content="Yashirin — места, о которых мало говорят"><meta property="og:description" content="Личные находки в Ташкенте и окрестностях. Посмотрите место, сохраните и откройте точку на карте."><title>Yashirin — места, о которых мало говорят</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="app.css"><script src="core.js" defer></script><script src="app.js" defer></script></head>
-<body><a class="skip" href="#main">К содержимому</a><header class="header"><a class="brand" href="#/" aria-label="Yashirin — главная">YASHIRIN<span>.</span></a><nav class="nav" aria-label="Основная навигация"><a href="#/" data-nav="places">Места</a><a href="#/saved" data-nav="saved">Сохранённое <span id="saved-count">0</span></a><a href="#/about" data-nav="about">О проекте</a></nav><a class="header-feedback" href="#/feedback">Оставить отзыв ↗</a></header>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0C10">
+<meta name="color-scheme" content="dark">
+<title>Yashirin — места Узбекистана, о которых мало говорят</title>
+<meta name="description" content="Места Узбекистана, о которых мало говорят. Автор бывает там лично и делится деталями: как добраться, сезон, что взять. Начинаем с Ташкента и окрестностей.">
+<link rel="canonical" href="https://yashirin.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yashirin">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:url" content="https://yashirin.netlify.app/">
+<meta property="og:title" content="Yashirin — места Узбекистана, о которых мало говорят">
+<meta property="og:description" content="Личные находки автора в Ташкенте и окрестностях: как добраться, сезон, зачем ехать. Сохраняйте и делитесь местами.">
+<meta property="og:image" content="https://yashirin.netlify.app/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="app.css">
+<script src="core.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="hdr">
+  <a class="brand" href="#/" aria-label="Yashirin, на главную"><span class="brand-name">YASHIRIN<em>.</em></span><span class="brand-sub">места, о которых мало говорят</span></a>
+  <nav class="nav" aria-label="Основная навигация">
+    <a href="#/" data-nav="places">Места</a>
+    <a href="#/saved" data-nav="saved">Сохранённое <span id="saved-count" class="badge" hidden>0</span></a>
+    <a href="#/about" data-nav="about">О проекте</a>
+  </nav>
+  <a class="beta" href="#/feedback">Бета · отзыв</a>
+</header>
+
 <main id="main" tabindex="-1">
-<section id="view-places" class="view"><div class="intro"><p class="eyebrow">Ташкент и окрестности · первые находки</p><h1>Места, о которых<br><em>мало говорят.</em></h1><p class="intro-text">Находим интересное, посещаем сами и делимся деталями. Выберите место для следующего открытия.</p></div><div class="list-toolbar"><div class="filters" role="group" aria-label="Категория места"><button data-filter="all" aria-pressed="true">Все места</button><button data-filter="gory" aria-pressed="false">Горы</button><button data-filter="voda" aria-pressed="false">У воды</button></div><p id="result-count" class="result-count" aria-live="polite"></p></div><div id="place-list" class="place-grid"></div><div class="suggest-strip"><div><h2>У вас тоже есть находка?</h2><p>Расскажите о месте — познакомимся с ним перед публикацией.</p></div><a class="button secondary" href="#/suggest">Предложить место ↗</a></div></section>
-<section id="view-place" class="view" hidden aria-labelledby="place-name"><div class="detail-toolbar"><a id="detail-back" class="text-link" href="#/">← Все места</a><button id="share-place" class="button compact secondary">Поделиться</button></div><div class="detail-layout"><img id="place-image" class="detail-photo" alt="" width="640" height="520"><div class="detail-copy"><p id="place-category" class="eyebrow"></p><h1 id="place-name"></h1><p class="verified">✓ Автор посетил лично</p><p id="place-description" class="description"></p><h2>Зачем заглянуть</h2><p id="place-reason"></p><div class="detail-actions"><button id="save-place" class="button primary" aria-pressed="false">Сохранить место</button><a id="place-map" class="button secondary" target="_blank" rel="noopener noreferrer">Открыть карту ↗</a></div><p id="storage-note" class="small">Сохранённое останется в этом браузере.</p></div></div><div class="details-bottom"><section><h2>Перед посещением</h2><dl id="place-facts" class="facts"></dl><p class="small">Личный визит подтверждает опыт автора. Актуальные условия доступа, погоду и цены уточняйте перед посещением.</p></section><section class="maps-panel"><h2>Как найти</h2><p>Откройте точку и выберите удобный способ добраться в приложении карт.</p><a id="yandex-map" class="map-link" target="_blank" rel="noopener noreferrer">Яндекс.Карты <span>↗</span></a><a id="google-map" class="map-link" target="_blank" rel="noopener noreferrer">Google Maps <span>↗</span></a><p id="coordinates" class="small"></p><a id="place-feedback" class="text-link" href="#/feedback">Были здесь? Поделитесь впечатлением →</a></section></div></section>
-<section id="view-saved" class="view" hidden><div class="section-head"><p class="eyebrow">Ваши планы</p><h1>Сохранённое</h1><p>Места, к которым хочется вернуться. Список хранится в этом браузере.</p></div><div id="saved-list" class="place-grid"></div><div id="saved-empty" class="empty" hidden><span class="empty-symbol" aria-hidden="true">♡</span><h2>Здесь будут ваши находки</h2><p>Откройте место и нажмите «Сохранить».</p><a href="#/" class="button primary">Посмотреть места</a></div></section>
-<section id="view-about" class="view narrow" hidden><p class="eyebrow">За знакомыми названиями — новые истории</p><h1>Это Yashirin<span class="accent">.</span></h1><p class="lead">Места Узбекистана, о которых мало говорят. И неожиданные стороны тех, что уже знакомы.</p><p>Мы начинаем с Ташкента и окрестностей. В подборке — места, где автор побывал лично. Нам интересны природа, городские детали, еда и люди. Своя машина не обязательна: способ добраться зависит от конкретного места.</p><h2>Две находки — начало</h2><p>Проект только запускается. Ваши впечатления помогут понять, какие места добавлять и какой информации не хватает перед посещением.</p><div class="action-row"><a class="button primary" href="#/feedback">Рассказать о впечатлениях</a><a class="button secondary" href="#/suggest">Предложить место</a></div><h2>Следить за находками</h2><a class="map-link" href="https://www.instagram.com/uzb.yashirin/" target="_blank" rel="noopener noreferrer">Instagram · @uzb.yashirin <span>↗</span></a><a class="map-link" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer">Написать автору в Telegram <span>↗</span></a><h2>Открывать вместе</h2><p>Совместные выезды пока планируются. Если вам интересен такой формат, напишите автору. Дату, стоимость и условия участия нужно согласовать до поездки.</p><a class="text-link" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer">Спросить о совместных выездах ↗</a></section>
-<section id="view-feedback" class="view narrow" hidden><a href="#/" class="text-link">← К местам</a><p class="eyebrow spaced">Помогите сделать Yashirin полезнее</p><h1>Как вам находки?</h1><p>Расскажите, что получилось и чего не хватило. Достаточно пары предложений.</p><form id="feedback-form" class="form"><label for="feedback-result">Что вы успели сделать?</label><select id="feedback-result" required><option value="">Выберите вариант</option><option>Пока только посмотрел(а)</option><option>Нашёл(ла) интересное место</option><option>Планирую посетить место</option><option>Посетил(а) место по рекомендации</option><option>Вернулся(ась) за новыми местами</option><option>Не нашёл(ла) ничего для себя</option></select><label for="feedback-place">Какое место? <span class="optional">Необязательно</span></label><select id="feedback-place"><option value="">Про сайт в целом</option><option value="metallurg">Зона отдыха «Металлург»</option><option value="chimyon">Чимён</option></select><label for="feedback-text">Что было полезно или мешало?</label><textarea id="feedback-text" rows="4" required minlength="3" maxlength="1200" placeholder="Например: место понравилось, но не понял(а), где находится вход"></textarea><p class="small">Подготовим текст для Telegram. Вы увидите его и сами отправите автору. Ответы на сайте не сохраняются.</p><button class="button primary" type="submit">Подготовить отзыв</button></form><div id="feedback-output" class="message-output" hidden></div></section>
-<section id="view-suggest" class="view narrow" hidden><a href="#/" class="text-link">← К местам</a><p class="eyebrow spaced">Пополнить подборку</p><h1>Ваша находка</h1><p>Городской двор, мастерская или вид на горы — что стоит заметить?</p><form id="suggest-form" class="form"><label for="suggest-name">Название места</label><input id="suggest-name" required minlength="2" maxlength="120" autocomplete="off" placeholder="Как его найти или узнать"><label for="suggest-location">Где находится</label><textarea id="suggest-location" required minlength="3" maxlength="500" rows="2" placeholder="Ссылка на карту, адрес или ориентир"></textarea><label for="suggest-reason">Что здесь интересного?</label><textarea id="suggest-reason" required minlength="3" maxlength="1200" rows="4" placeholder="Расскажите, что вам запомнилось и были ли вы там лично"></textarea><p class="small">Подготовим сообщение для Telegram. Вы отправите его сами. Место появится в подборке после знакомства и проверки.</p><button class="button primary" type="submit">Подготовить сообщение</button></form><div id="suggest-output" class="message-output" hidden></div></section>
-<section id="view-not-found" class="view narrow" hidden><p class="eyebrow">Не нашли эту страницу</p><h1>Начнём с находок?</h1><p>Возможно, ссылка изменилась. Все доступные места собраны в подборке.</p><a href="#/" class="button primary">Все места</a></section>
-</main><footer class="footer"><p>Yashirin · открывать и делиться</p><div><a href="https://www.instagram.com/uzb.yashirin/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="#/feedback">Обратная связь</a></div></footer><div id="toast" role="status" aria-live="polite" class="toast" hidden></div><noscript><div class="noscript">Для карточек и сохранения включите JavaScript. Наши находки также доступны в <a href="https://www.instagram.com/uzb.yashirin/">Instagram</a>.</div></noscript></body></html>
+
+<!-- МЕСТА -->
+<section id="view-places" class="view">
+  <div class="intro">
+    <p class="eyebrow">Ташкент и окрестности · первые находки</p>
+    <h1><span id="greet" class="greet"></span>Места, о&nbsp;которых<br><em>мало говорят.</em></h1>
+    <p class="intro-text">Находим интересное, бываем там сами и рассказываем, как добраться и зачем ехать. Выберите место для следующего выходного.</p>
+  </div>
+  <div class="toolbar">
+    <div id="filters" class="filters" role="group" aria-label="Категория места"></div>
+    <p id="result-count" class="result-count" aria-live="polite"></p>
+  </div>
+  <a id="map-all" class="maprow" target="_blank" rel="noopener noreferrer" data-track="map_all"><span>Все точки на одной карте в <b>Яндекс.Картах</b></span><span class="go">↗</span></a>
+  <div id="place-list" class="pgrid"></div>
+  <div class="strip">
+    <div><h2>У вас тоже есть находка?</h2><p>Расскажите о месте. Автор съездит, посмотрит и добавит его в подборку с вашим именем.</p></div>
+    <a class="btn ghost" href="#/suggest">Предложить место</a>
+  </div>
+</section>
+
+<!-- МЕСТО -->
+<section id="view-place" class="view" hidden aria-labelledby="place-name">
+  <div class="detail-toolbar">
+    <a id="detail-back" class="iconbtn" href="#/">‹ Все места</a>
+    <button id="share-place" class="iconbtn" type="button">Поделиться ↗</button>
+  </div>
+  <div class="detail">
+    <div class="phero"><img id="place-image" alt="" width="900" height="600" decoding="async"></div>
+    <div class="detail-copy">
+      <p id="place-category" class="catline"></p>
+      <h1 id="place-name" class="pt"></h1>
+      <p id="place-tagline" class="psub"></p>
+      <p class="verified">✓ Автор был здесь лично</p>
+      <p id="place-meta" class="metaline"></p>
+      <p id="place-description" class="desc"></p>
+      <h2 class="sect">Зачем ехать</h2>
+      <p id="place-reason" class="desc"></p>
+      <div class="detail-actions">
+        <button id="save-place" class="btn primary" type="button" aria-pressed="false">♡ Сохранить место</button>
+        <a id="place-map" class="btn ghost" target="_blank" rel="noopener noreferrer" data-track="map_open">Проложить маршрут ↗</a>
+      </div>
+      <p id="storage-note" class="small">Сохранённое остаётся в этом браузере.</p>
+    </div>
+  </div>
+  <div class="detail-bottom">
+    <section>
+      <h2 class="sect">Перед поездкой</h2>
+      <dl id="place-facts" class="rows"></dl>
+      <p id="facts-date" class="small"></p>
+    </section>
+    <section class="maps-panel">
+      <h2 class="sect">Как найти</h2>
+      <p class="small">Откройте точку и выберите удобный способ добраться в приложении карт.</p>
+      <a id="yandex-map" class="linkrow" target="_blank" rel="noopener noreferrer" data-track="map_open"><span>Точка в Яндекс.Картах</span><span class="go">↗</span></a>
+      <a id="google-map" class="linkrow" target="_blank" rel="noopener noreferrer" data-track="map_open"><span>Точка в Google Maps</span><span class="go">↗</span></a>
+      <p id="coordinates" class="small coord"></p>
+      <a class="linkrow" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer" data-track="telegram_click"><span>Вопросы по месту<span class="sub">Telegram автора, отвечу лично</span></span><span class="go">›</span></a>
+      <a id="place-feedback" class="linkrow" href="#/feedback"><span>Были здесь?<span class="sub">Поделитесь впечатлением, это помогает проекту</span></span><span class="go">›</span></a>
+    </section>
+  </div>
+</section>
+
+<!-- СОХРАНЁННОЕ -->
+<section id="view-saved" class="view" hidden>
+  <div class="intro">
+    <p class="eyebrow">Ваши планы</p>
+    <h1>Сохранённое</h1>
+    <p class="intro-text">Места, к которым хочется вернуться. Список хранится в этом браузере.</p>
+  </div>
+  <div id="saved-list" class="pgrid"></div>
+  <div id="saved-empty" class="empty" hidden>
+    <span class="empty-symbol" aria-hidden="true">♡</span>
+    <h2>Здесь будут ваши находки</h2>
+    <p>Откройте место и нажмите «Сохранить».</p>
+    <a href="#/" class="btn primary">Посмотреть места</a>
+  </div>
+</section>
+
+<!-- О ПРОЕКТЕ -->
+<section id="view-about" class="view narrow" hidden>
+  <p class="eyebrow">За знакомыми названиями новые истории</p>
+  <h1>Это Yashirin<em>.</em></h1>
+  <p class="lead">Места Узбекистана, о которых мало говорят. И неожиданные стороны тех, что уже знакомы.</p>
+  <p>Начинаем с Ташкента и окрестностей. В подборке только места, где автор побывал лично: с фотографиями оттуда, дорогой, сезоном и честным «зачем ехать». Своя машина не обязательна, способ добраться зависит от места.</p>
+  <div class="stats">
+    <div><b data-count-places>2</b><span>места посещены и описаны</span></div>
+    <div><b>27</b><span>кандидатов в списке на проверку</span></div>
+    <div><b>≤150 км</b><span>от Ташкента, выезд одного дня</span></div>
+  </div>
+  <h2 class="sect">Что дальше</h2>
+  <p>Проект в открытой бете. Каждая новая точка появляется после реального выезда. Ваши впечатления помогают понять, какие места добавлять и какой информации не хватает перед поездкой.</p>
+  <div class="action-row">
+    <a class="btn primary" href="#/feedback">Рассказать о впечатлениях</a>
+    <a class="btn ghost" href="#/suggest">Предложить место</a>
+  </div>
+  <h2 class="sect">Следить за находками</h2>
+  <a class="linkrow" href="https://www.instagram.com/uzb.yashirin/" target="_blank" rel="noopener noreferrer" data-track="instagram_click"><span>Instagram<span class="sub">@uzb.yashirin, видео с проверенных точек</span></span><span class="go">↗</span></a>
+  <a class="linkrow" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer" data-track="telegram_click"><span>Telegram автора<span class="sub">вопросы, идеи, совместные выезды</span></span><span class="go">↗</span></a>
+  <h2 class="sect">Поехать вместе</h2>
+  <p>Совместные выезды планируются. Если такой формат интересен, напишите автору: дату, стоимость и условия участия договорим до поездки.</p>
+</section>
+
+<!-- ОТЗЫВ -->
+<section id="view-feedback" class="view narrow" hidden>
+  <a href="#/" class="iconbtn inline">‹ К местам</a>
+  <p class="eyebrow spaced">Помогите сделать Yashirin полезнее</p>
+  <h1>Как вам находки?</h1>
+  <p>Пара предложений о том, что получилось и чего не хватило. Отзыв уходит автору сразу.</p>
+  <form id="feedback-form" class="form" name="feedback" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/#/thanks">
+    <input type="hidden" name="form-name" value="feedback">
+    <p class="hp"><label>Не заполняйте это поле: <input name="bot-field" autocomplete="off" tabindex="-1"></label></p>
+    <label for="feedback-result">Что вы успели сделать?</label>
+    <select id="feedback-result" name="result" required>
+      <option value="">Выберите вариант</option>
+      <option>Пока только посмотрел(а)</option>
+      <option>Нашёл(ла) интересное место</option>
+      <option>Планирую поехать</option>
+      <option>Побывал(а) по рекомендации</option>
+      <option>Вернулся(ась) за новыми местами</option>
+      <option>Не нашёл(ла) ничего для себя</option>
+    </select>
+    <label for="feedback-place">Какое место? <span class="optional">необязательно</span></label>
+    <select id="feedback-place" name="place">
+      <option value="">Про сайт в целом</option>
+      <option value="metallurg">Зона отдыха «Металлург»</option>
+      <option value="chimyon">Чимён</option>
+    </select>
+    <label for="feedback-text">Что было полезно или мешало?</label>
+    <textarea id="feedback-text" name="text" rows="4" required minlength="3" maxlength="1200" placeholder="Например: место понравилось, но не понял(а), где вход и сколько стоит"></textarea>
+    <label for="feedback-contact">Как с вами связаться? <span class="optional">необязательно</span></label>
+    <input id="feedback-contact" name="contact" maxlength="120" autocomplete="off" placeholder="Telegram или телефон, если хотите ответ">
+    <input type="hidden" name="page" value="">
+    <button class="btn primary" type="submit">Отправить отзыв</button>
+    <p class="small">Отзыв приходит автору на почту. Если автоматически отправить не получится, покажем текст для Telegram.</p>
+  </form>
+  <div id="feedback-output" class="fout" hidden></div>
+</section>
+
+<!-- ПРЕДЛОЖИТЬ МЕСТО -->
+<section id="view-suggest" class="view narrow" hidden>
+  <a href="#/" class="iconbtn inline">‹ К местам</a>
+  <p class="eyebrow spaced">Пополнить подборку</p>
+  <h1>Ваша находка</h1>
+  <p>Двор, мастерская, тропа, вид на горы или тандыр у дороги. Что стоит заметить?</p>
+  <form id="suggest-form" class="form" name="suggest" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/#/thanks">
+    <input type="hidden" name="form-name" value="suggest">
+    <p class="hp"><label>Не заполняйте это поле: <input name="bot-field" autocomplete="off" tabindex="-1"></label></p>
+    <label for="suggest-name">Название места</label>
+    <input id="suggest-name" name="name" required minlength="2" maxlength="120" autocomplete="off" placeholder="Как его найти или узнать">
+    <label for="suggest-location">Где находится</label>
+    <textarea id="suggest-location" name="location" required minlength="3" maxlength="500" rows="2" placeholder="Ссылка на карту, адрес или ориентир"></textarea>
+    <label for="suggest-reason">Что здесь интересного?</label>
+    <textarea id="suggest-reason" name="reason" required minlength="3" maxlength="1200" rows="4" placeholder="Что запомнилось, были ли вы там сами, что важно знать"></textarea>
+    <label for="suggest-contact">Как с вами связаться? <span class="optional">необязательно</span></label>
+    <input id="suggest-contact" name="contact" maxlength="120" autocomplete="off" placeholder="Telegram или телефон, чтобы уточнить детали">
+    <input type="hidden" name="page" value="">
+    <button class="btn primary" type="submit">Предложить место</button>
+    <p class="small">Место появится в подборке после того, как автор побывает там сам.</p>
+  </form>
+  <div id="suggest-output" class="fout" hidden></div>
+</section>
+
+<!-- СПАСИБО (для отправки без JS) -->
+<section id="view-thanks" class="view narrow" hidden>
+  <p class="eyebrow">Получили</p>
+  <h1>Спасибо<em>.</em></h1>
+  <p>Сообщение дошло до автора. Вернуться к местам или написать напрямую в Telegram.</p>
+  <div class="action-row"><a href="#/" class="btn primary">К местам</a><a class="btn ghost" href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer">Написать автору ↗</a></div>
+</section>
+
+<!-- 404 -->
+<section id="view-not-found" class="view narrow" hidden>
+  <p class="eyebrow">Не нашли эту страницу</p>
+  <h1>Начнём с находок?</h1>
+  <p>Возможно, ссылка изменилась. Все доступные места собраны в подборке.</p>
+  <a href="#/" class="btn primary">Все места</a>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>Yashirin · открывать и делиться · Ташкент</p>
+  <div>
+    <a href="https://www.instagram.com/uzb.yashirin/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+    <a href="https://t.me/yunusovprod" target="_blank" rel="noopener noreferrer">Telegram ↗</a>
+    <a href="#/feedback">Обратная связь</a>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
+<noscript><div class="noscript">Для карточек и сохранения включите JavaScript. Находки также есть в <a href="https://www.instagram.com/uzb.yashirin/">Instagram</a>.</div></noscript>
+</body>
+</html>

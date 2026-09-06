@@ -1,0 +1,15 @@
+{
+  "name": "Yashirin — места, о которых мало говорят",
+  "short_name": "Yashirin",
+  "description": "Места Узбекистана, о которых мало говорят. Личные находки автора: как добраться, сезон, зачем ехать.",
+  "lang": "ru",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0B0C10",
+  "theme_color": "#0B0C10",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

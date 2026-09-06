@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yashirin.netlify.app/sitemap.xml

@@ -1,0 +1,7 @@
+# Netlify: публикуем папку site как есть. Тесты запускаются перед деплоем.
+[build]
+  publish = "site"
+  command = "cd site && npm test"
+
+[build.environment]
+  NODE_VERSION = "22"
