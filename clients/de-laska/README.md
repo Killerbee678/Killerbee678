@@ -4,3 +4,4 @@
 
 - `de-laska-growth-plan.html` конкурентный анализ, аудит Instagram, контент-стратегия, план на 90 дней и вопросы к владельцу. Опубликовано: https://claude.ai/artifact/85tRZRDaDigctFHvGcBfey
 - `smm-agent-instructions.md` инструкции для SMM-агента (проект Claude): бренд, рубрики, задачи, правила.
+- `project-knowledge/` файлы для Project knowledge проекта Claude; архив `de-laska-project-knowledge.zip`.
