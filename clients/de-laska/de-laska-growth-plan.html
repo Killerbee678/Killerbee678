@@ -1,0 +1,611 @@
+<title>De'Laska: рост через Instagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;800&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~760px) with wide breakouts for tables and the positioning map; laminated-dough stripe as the only ornament */
+:root {
+  --bg: #FAF9F7;
+  --surface: #F1EDE8;
+  --fg: #251B16;
+  --muted: #6B5C53;
+  --line: #DDD4CC;
+  --accent: #8A4B22;      /* baked crust */
+  --accent-soft: #F3E2D2;
+  --good: #3F6B3A;
+  --warn: #9A6A0C;
+  --bad: #A2392B;
+  --display: "Geologica", "Segoe UI", system-ui, sans-serif;
+  --body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16110E; --surface: #211A16; --fg: #EFE6DE; --muted: #B3A398; --line: #3A2F28;
+    --accent: #E0A46E; --accent-soft: #3A2A1E; --good: #8FC386; --warn: #E2B75A; --bad: #EE8C7E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16110E; --surface: #211A16; --fg: #EFE6DE; --muted: #B3A398; --line: #3A2F28;
+  --accent: #E0A46E; --accent-soft: #3A2A1E; --good: #8FC386; --warn: #E2B75A; --bad: #EE8C7E;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 400 16px/1.6 var(--body);
+  padding: 0 20px;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 40px 80px; }
+.col { max-width: 760px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font: 600 0.74rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+.muted { color: var(--muted); }
+.small { font-size: 0.88rem; }
+
+/* laminated dough: 27 thin layers */
+.layers { height: 14px; margin-block: 22px 26px; max-width: 760px;
+  background: repeating-linear-gradient(180deg, var(--accent) 0 1px, transparent 1px 2.6px);
+  opacity: .55; border-radius: 2px; }
+
+header .lead { font-size: 1.15rem; margin-top: 14px; max-width: 680px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; font: 400 0.82rem/1.4 var(--mono); color: var(--muted); }
+
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+nav.toc a { text-decoration: none; color: var(--fg); border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; font-size: 0.86rem; }
+nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+section { margin-top: 64px; display: grid; gap: 18px; }
+section > .head { display: grid; gap: 8px; }
+.col > p + p, .prose > * + * { margin-top: 12px; }
+ul, ol { margin: 0; padding-left: 1.25em; }
+li + li { margin-top: 6px; }
+
+.verdict { background: var(--accent-soft); padding: 18px 20px; border-radius: 6px; max-width: 760px; }
+.verdict strong { font-family: var(--display); }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.box { border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; min-width: 0; display: grid; gap: 8px; align-content: start; }
+.box h3 { font-size: 1rem; }
+.box ul { font-size: 0.94rem; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 28px; font-family: var(--mono); font-size: 0.86rem; }
+.stats b { font-family: var(--display); font-size: 1.35rem; display: block; color: var(--fg); font-weight: 800; }
+.stats span { color: var(--muted); }
+
+.table { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font: 600 0.72rem/1.3 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); background: var(--surface); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+tr.us td { background: var(--accent-soft); }
+
+.tag { display: inline-block; font: 600 0.7rem/1 var(--mono); letter-spacing: 0.04em; padding: 4px 7px; border-radius: 4px; border: 1px solid currentColor; white-space: nowrap; }
+.t-good { color: var(--good); } .t-warn { color: var(--warn); } .t-bad { color: var(--bad); } .t-acc { color: var(--accent); }
+
+.issue { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.issue:last-child { border-bottom: 1px solid var(--line); }
+.issue p { grid-column: 2; font-size: 0.94rem; }
+.issue h3 { font-size: 1rem; }
+
+.map { border: 1px solid var(--line); border-radius: 6px; padding: 12px; overflow-x: auto; }
+.map svg { display: block; width: 100%; min-width: 560px; height: auto; }
+
+.ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+.ideas .box li { font-size: 0.93rem; }
+.hook { font-family: var(--mono); font-size: 0.86rem; background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+
+.mix { display: flex; height: 30px; border-radius: 4px; overflow: hidden; max-width: 760px; font: 600 0.72rem/30px var(--mono); }
+.mix div { padding: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--bg); }
+.legend { display: grid; gap: 6px; font-size: 0.92rem; max-width: 760px; }
+.legend div { display: grid; grid-template-columns: 14px 52px 1fr; gap: 10px; align-items: baseline; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.pct { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.phase { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
+.phase:last-child { border-bottom: 1px solid var(--line); }
+.phase .when { font: 600 0.82rem/1.4 var(--mono); color: var(--accent); }
+.phase ul { font-size: 0.95rem; }
+@media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 6px; } }
+
+.qgroup { display: grid; gap: 10px; }
+.qgroup ol { display: grid; gap: 6px; }
+.qgroup li { margin: 0; }
+.qgroup li.key::marker { color: var(--accent); font-weight: 700; }
+.key-note { font-size: 0.88rem; }
+
+.sources li { font-size: 0.86rem; }
+footer { margin-top: 64px; font-size: 0.84rem; color: var(--muted); max-width: 760px; }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Конкурентный анализ · Ташкент · октябрь 2026</div>
+  <h1 style="margin-top:12px">De'Laska: как продавать больше через Instagram</h1>
+  <p class="lead">Разбор профиля @de_laska, карта конкурентов среди пекарен и кофеен Ташкента, позиционирование, контент-план, механики продаж и план на 90 дней. В конце список вопросов к владельцу: без ответов на них часть рекомендаций остаётся гипотезами.</p>
+  <div class="meta">
+    <span>Источник по De'Laska: скриншот профиля</span>
+    <span>Конкуренты: открытые источники (афиша, 2ГИС, Яндекс Карты, справочники)</span>
+    <span>Статистика Instagram аккаунта: не получена</span>
+  </div>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#summary">Главное</a>
+    <a href="#profile">Аудит профиля</a>
+    <a href="#competitors">Конкуренты</a>
+    <a href="#position">Позиционирование</a>
+    <a href="#swot">SWOT</a>
+    <a href="#content">Контент</a>
+    <a href="#ideas">40 идей</a>
+    <a href="#sales">Механики продаж</a>
+    <a href="#ads">Реклама и блогеры</a>
+    <a href="#kpi">Метрики</a>
+    <a href="#plan">План 90 дней</a>
+    <a href="#questions">Вопросы</a>
+  </nav>
+</header>
+
+<div class="layers" aria-hidden="true"></div>
+
+<!-- SUMMARY -->
+<section id="summary">
+  <div class="head"><div class="eyebrow">Главное</div><h2>Пять выводов</h2></div>
+  <div class="col prose">
+    <ol>
+      <li><b>Аудитория уже есть, конверсии в продажу не видно.</b> 56,7 тыс. подписчиков и 618 публикаций для пекарни в Ташкенте это сильная база. Слабое место в профиле: из него непонятно, как заказать прямо сейчас. Нет явной кнопки «заказать», нет цены, ссылка спрятана в taplink.</li>
+      <li><b>Позиционирование размыто.</b> В шапке одновременно «Круассан по-французски», «ПП хлеб» и «пекарня». В ленте мороженое, завтраки, Нью-Йорк роллы, скетчи. Человек не запоминает, за чем идти именно сюда.</li>
+      <li><b>Ниша «трендовая выпечка до полуночи» свободна.</b> Breadly и Paul держат премиальную классику, Wien специализируется на круассанах в центре, Safia закрывает массовые торты. Никто из них не делает ставку на вирусные продукты и вечерний трафик. У De'Laska точка в Seoul Mun работает до 00:00.</li>
+      <li><b>Сильнейший актив это узбекоязычные Reels с людьми.</b> Скетчи с командой и реакциями прохожих дают охват, который премиальные конкуренты не получают со своей «глянцевой» подачей. Это надо превратить в систему, а не в разовые удачи.</li>
+      <li><b>Instagram должен вести в Telegram и на карты.</b> По оценкам, Telegram в Узбекистане охватывает больше 70% населения, Instagram около 14 млн человек. Заказы, повторные покупки и отзывы надёжнее собирать в Telegram, Яндекс Картах и 2ГИС, а Instagram использовать как витрину и источник охвата.</li>
+    </ol>
+  </div>
+  <div class="verdict">
+    <strong>Предлагаемое позиционирование:</strong> «De'Laska: круассаны и Нью-Йорк роллы, которые хочется снять. Свежая партия каждый час, Seoul Mun до полуночи». Цена ниже Paul и Breadly, продукт заметнее, подача живее.
+  </div>
+</section>
+
+<!-- PROFILE AUDIT -->
+<section id="profile">
+  <div class="head"><div class="eyebrow">Аудит профиля @de_laska</div><h2>Что видит человек за первые 5 секунд</h2></div>
+  <div class="stats">
+    <div><b>56,7 тыс.</b><span>подписчиков</span></div>
+    <div><b>618</b><span>публикаций</span></div>
+    <div><b>3</b><span>точки</span></div>
+    <div><b>6</b><span>хайлайтов</span></div>
+    <div><b>до 00:00</b><span>Seoul Mun</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="box">
+      <h3><span class="tag t-good">Работает</span></h3>
+      <ul>
+        <li>Узнаваемый логотип и единый коричневый цвет в аватаре и обложках хайлайтов.</li>
+        <li>Reels с людьми: гаишник пробует напиток, команда танцует ночью у Seoul Mun, скетчи «Ular buni ko'rishadi», «5 daqiqa qolganda». Это нативный ташкентский юмор на узбекском.</li>
+        <li>Крупные «аппетитные» кадры: разлом круассана, рожок с шоколадом, завтрак с сосисками.</li>
+        <li>Неоновая вывеска De'Laska уже работает как фотозона.</li>
+        <li>Есть хайлайты «Меню», «Заказы», «Адрес», «Отзывы».</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3><span class="tag t-bad">Мешает продажам</span></h3>
+      <ul>
+        <li>Шапка только на русском, а контент в основном на узбекском.</li>
+        <li>Три позиционирования в одной строке: круассан, ПП хлеб, пекарня.</li>
+        <li>Нет призыва к действию и цены. Нет упоминания доставки.</li>
+        <li>Адрес Каракамыша обрезан на «ещё».</li>
+        <li>Два хайлайта с меню («Menu Seoul» и «Меню»), хайлайт с именем блогера без пояснения.</li>
+        <li>Лента выглядит разношёрстно: нет узнаваемой обложки Reels.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col">
+    <h3 style="margin-bottom:6px">Исправления в профиле, по приоритету</h3>
+    <div class="issue"><span class="tag t-bad">Сразу</span><h3>Переписать шапку на двух языках</h3>
+      <p>Вариант: «🥐 Kruassan va New York roll · Круассаны и Нью-Йорк роллы<br>📍 Seoul Mun 11:00–00:00 · Beshyog'och 10:00–23:00 · Qoraqamish<br>🛵 Yetkazib berish / Доставка 👇». Убрать «ПП хлеб» из имени, если это не ключевой продукт.</p></div>
+    <div class="issue"><span class="tag t-bad">Сразу</span><h3>Одна ссылка, которая ведёт к заказу</h3>
+      <p>Первой кнопкой в taplink поставить «Заказать доставку» (Telegram-бот или карточка в Uzum Tezkor / Yandex Eats), второй «Маршрут» на Яндекс Карты для каждой точки. Проверить, что taplink открывается быстро на мобильном.</p></div>
+    <div class="issue"><span class="tag t-warn">Неделя 1</span><h3>Закрепить три поста</h3>
+      <p>Хит-продукт (Reels с разломом Нью-Йорк ролла), «Как заказать» (карусель: доставка, самовывоз, предзаказ тортов и наборов), «Где мы» (видеопроход до точки в Seoul Mun).</p></div>
+    <div class="issue"><span class="tag t-warn">Неделя 1</span><h3>Пересобрать хайлайты</h3>
+      <p>Порядок: «Menyu / Меню» (все точки, с ценами) → «Buyurtma / Заказ» → «Yangi / Новинки» → «Manzil / Адреса» → «Fikrlar / Отзывы» → «Sovg'a / Наборы и торты». Хайлайт блогера переименовать в «Hamkorlar / С нами пробовали».</p></div>
+    <div class="issue"><span class="tag t-acc">Месяц 1</span><h3>Единая обложка Reels</h3>
+      <p>Крупный продукт плюс 2–4 слова на узбекском в одном шрифте и месте. Сетка начнёт выглядеть как меню, а не как случайные видео.</p></div>
+  </div>
+</section>
+
+<!-- COMPETITORS -->
+<section id="competitors">
+  <div class="head">
+    <div class="eyebrow">Карта конкурентов</div>
+    <h2>Кто забирает того же гостя</h2>
+    <p class="col muted">Прямые конкуренты продают круассаны и выпечку к кофе. Косвенные забирают тот же «перекус с кофе» или вечерний поход в Seoul Mun. Данные из открытых источников; число подписчиков и текущие цены нужно сверить вручную.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Заведение</th><th>Формат и точки</th><th>Сильная сторона</th><th>Слабость или пробел</th><th>Что взять</th></tr></thead>
+      <tbody>
+        <tr><td>Breadly</td><td>Кафе-пекарня с собственным производством. Не меньше 5–6 точек: Аккурган, Тафаккур, Сайрам, Х. Алимджана, Шевченко, Буюк Ипак Йули</td><td>Репутация «лучших круассанов и завтраков», сезонное меню, хорошие оценки в 2ГИС (4,6–4,7)</td><td>Цены выше среднего по городу, акцент на утро</td><td>Сезонные линейки и подача «пекарня, где всё печётся при вас»</td></tr>
+        <tr><td>PAUL</td><td>Французская сеть, в Ташкенте с 2019 года. Амира Темура, Tashkent City Mall, H.A.V.O, Amirsoy</td><td>Международный бренд, доверие, туристы</td><td>Дорого, формальная подача, мало локального юмора</td><td>Стандарты витрины и упаковки</td></tr>
+        <tr><td>Wien (@wien.uz)</td><td>«Первая круассантерия Узбекистана». Ц-1 и Tashkent City Mall (данные 2024 года)</td><td>Узкая специализация на круассанах, сладкие и сытные начинки, specialty-кофе</td><td>Мало точек, центр города</td><td>Сытные круассаны как обед: лосось, тунец, индейка</td></tr>
+        <tr><td>Bon! (@boncafe_uz)</td><td>Семейная французская кофейня с 2009 года, несколько точек в центре</td><td>Давняя лояльная аудитория, рейтинг 5,0 при 549 оценках на одной из точек; круассан около 22 000 сум</td><td>Классическая подача, мало трендовых продуктов</td><td>Работа с отзывами на картах как системой</td></tr>
+        <tr><td>Safia (@safiacakes)</td><td>Кондитерский дом, около 13 точек по справочнику, своё приложение</td><td>Охват районов, торты, «День клиента» и конкурсы</td><td>Массовый формат, круассаны не главный продукт</td><td>Приложение и программа лояльности, регулярные акции</td></tr>
+        <tr><td>CakeLab</td><td>Кондитерская сеть, несколько филиалов</td><td>Десерты, оценки 4,2–4,6</td><td>Слабее в утренней выпечке</td><td>Предзаказ тортов</td></tr>
+        <tr><td>Pehkar by Yuliya Gafurova</td><td>Авторская кондитерская</td><td>4,9 при 54 оценках в 2ГИС по запросу «круассаны»</td><td>Масштаб</td><td>Личный бренд кондитера в контенте</td></tr>
+        <tr><td>Bread House, «Француз»</td><td>Пекарня на Мирзо Улугбека; кафе на Мукими</td><td>Локальная известность</td><td>Слабый Instagram по открытым данным</td><td>Нечего копировать, но они делят тот же поисковый запрос</td></tr>
+        <tr><td>Кофейни Seoul Mun</td><td>Costa Coffee и корейские кафе внутри комплекса</td><td>Поток людей вечером</td><td>Выпечка у них вторична</td><td>Совместные акции «кофе + круассан» вместо конкуренции</td></tr>
+        <tr><td>Домашние кондитеры в Instagram</td><td>Сотни аккаунтов, заказ через Direct</td><td>Цена, личная подача</td><td>Нет точки, нет стабильного качества</td><td>Скорость ответа в Direct и живое общение</td></tr>
+        <tr class="us"><td>De'Laska</td><td>3 точки: Seoul Mun, Бешкайрагач 54, Каракамыш 1/1</td><td>Трендовые продукты, вечерние часы, узбекоязычные Reels, 56,7 тыс. подписчиков</td><td>Размытое позиционирование, нет видимого пути к заказу</td><td>Предложение ниже по плану</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col small muted">Как проверить за 1 час: открыть профили конкурентов, записать подписчиков, частоту Reels за 30 дней, средние просмотры 10 последних Reels, цены на круассан и наличие доставки. Шаблон таблицы есть в разделе «Метрики».</p>
+</section>
+
+<!-- POSITIONING -->
+<section id="position">
+  <div class="head">
+    <div class="eyebrow">Позиционирование</div>
+    <h2>Где на карте свободное место</h2>
+    <p class="col muted">Положение точек это экспертная оценка по открытым данным, а не замер. Горизонталь: насколько продукт «просится в кадр» (новинки, тренды, вау-подача). Вертикаль: средний чек.</p>
+  </div>
+  <div class="map">
+    <svg viewBox="0 0 640 400" role="img" aria-label="Карта позиционирования: цена против трендовости продукта">
+      <rect x="70" y="20" width="540" height="320" fill="none" stroke="var(--line)"/>
+      <line x1="340" y1="20" x2="340" y2="340" stroke="var(--line)" stroke-dasharray="4 4"/>
+      <line x1="70" y1="180" x2="610" y2="180" stroke="var(--line)" stroke-dasharray="4 4"/>
+      <text x="340" y="372" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono, monospace" font-size="12">классика  →  трендовые, «вирусные» продукты</text>
+      <text x="22" y="180" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono, monospace" font-size="12" transform="rotate(-90 22 180)">средний чек  →</text>
+      <text x="80" y="38" fill="var(--muted)" font-family="Golos Text, sans-serif" font-size="11">дорого и классично</text>
+      <text x="600" y="38" text-anchor="end" fill="var(--muted)" font-family="Golos Text, sans-serif" font-size="11">дорого и модно</text>
+      <text x="80" y="332" fill="var(--muted)" font-family="Golos Text, sans-serif" font-size="11">доступно и привычно</text>
+      <text x="600" y="332" text-anchor="end" fill="var(--muted)" font-family="Golos Text, sans-serif" font-size="11">доступно и модно</text>
+      <rect x="400" y="200" width="190" height="110" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-dasharray="5 4"/>
+      <text x="495" y="296" text-anchor="middle" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="11">свободная ниша</text>
+      <g font-family="Golos Text, sans-serif" font-size="13" fill="var(--fg)">
+        <circle cx="150" cy="62" r="7" fill="var(--muted)"/><text x="162" y="66">PAUL</text>
+        <circle cx="230" cy="92" r="7" fill="var(--muted)"/><text x="242" y="96">Breadly</text>
+        <circle cx="400" cy="78" r="7" fill="var(--muted)"/><text x="412" y="82">Wien</text>
+        <circle cx="190" cy="152" r="7" fill="var(--muted)"/><text x="202" y="156">Bon!</text>
+        <circle cx="160" cy="270" r="7" fill="var(--muted)"/><text x="172" y="274">Safia</text>
+        <circle cx="270" cy="240" r="7" fill="var(--muted)"/><text x="282" y="244">CakeLab</text>
+        <circle cx="300" cy="300" r="7" fill="var(--muted)"/><text x="312" y="304">домашние кондитеры</text>
+        <circle cx="440" cy="200" r="7" fill="none" stroke="var(--accent)" stroke-width="2"/><text x="370" y="196" fill="var(--muted)" font-size="12">сейчас</text>
+        <line x1="447" y1="207" x2="488" y2="238" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="495" cy="244" r="9" fill="var(--accent)"/><text x="510" y="249" font-weight="600" fill="var(--accent)">De'Laska</text>
+      </g>
+    </svg>
+  </div>
+  <div class="grid3">
+    <div class="box"><h3>Для кого</h3><p class="small">Молодёжь 16–30 лет, пары и компании, которые вечером гуляют в Seoul Mun; офисы рядом с точками утром; мамы, которым нужен быстрый вкусный перекус для детей.</p></div>
+    <div class="box"><h3>За чем приходят</h3><p class="small">За продуктом, который видели в Reels: Нью-Йорк ролл, рожок-круассан с шоколадом, круассан с хрустом на камеру. Повод «попробовать и снять».</p></div>
+    <div class="box"><h3>Почему не к конкуренту</h3><p class="small">Дешевле Paul и Breadly, открыто до полуночи, всегда есть новинка месяца, общаются на узбекском и с юмором.</p></div>
+  </div>
+</section>
+
+<!-- SWOT -->
+<section id="swot">
+  <div class="head"><div class="eyebrow">SWOT</div><h2>Сильные и слабые стороны</h2></div>
+  <div class="grid2">
+    <div class="box"><h3><span class="tag t-good">S · Сильные</span></h3><ul>
+      <li>56,7 тыс. подписчиков и привычка снимать Reels</li>
+      <li>Точка в Seoul Mun с вечерним потоком и работой до 00:00</li>
+      <li>Трендовые продукты: Нью-Йорк роллы, круассан-рожок</li>
+      <li>Живая команда в кадре, локальный юмор</li>
+      <li>Три точки в разных районах</li></ul></div>
+    <div class="box"><h3><span class="tag t-bad">W · Слабые</span></h3><ul>
+      <li>Нет единого позиционирования</li>
+      <li>Не виден путь «увидел → заказал»</li>
+      <li>Шапка и меню не на узбекском</li>
+      <li>Неизвестно, считаются ли заказы из Instagram</li>
+      <li>Узнаваемость за пределами подписчиков, видимо, низкая: в медиа и подборках бренд не встречается</li></ul></div>
+    <div class="box"><h3><span class="tag t-acc">O · Возможности</span></h3><ul>
+      <li>Telegram-канал и бот: самый массовый канал в стране</li>
+      <li>Отзывы в Яндекс Картах и 2ГИС: по запросу «круассаны» люди ищут именно там</li>
+      <li>Агрегаторы доставки: Uzum Tezkor признан доминирующим, Wolt ушёл из страны в марте 2026</li>
+      <li>Корпоративные завтраки и подарочные наборы</li>
+      <li>Сезоны: Новый год, 8 марта, Навруз, Рамадан (поздние часы работы)</li>
+      <li>Попадание в подборки weproject, spot, afisha</li></ul></div>
+    <div class="box"><h3><span class="tag t-warn">T · Угрозы</span></h3><ul>
+      <li>Тренд на Нью-Йорк роллы быстро копируют</li>
+      <li>Breadly и Paul расширяются, Wien уже в торговых центрах</li>
+      <li>Рост цен на сливочное масло съедает маржу</li>
+      <li>Негативные отзывы о качестве при росте потока</li>
+      <li>Зависимость от одного алгоритма Instagram</li></ul></div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section id="content">
+  <div class="head">
+    <div class="eyebrow">Контент-стратегия</div>
+    <h2>Шесть рубрик и их доля в ленте</h2>
+    <p class="col muted">Ритм: 5 Reels в неделю, 1 карусель, Stories каждый день по 6–10 штук. Язык: около 70% контента на узбекском, 30% на русском, субтитры на обоих языках в продуктовых видео.</p>
+  </div>
+  <div class="mix" aria-hidden="true">
+    <div style="width:30%;background:var(--accent)">Хит-продукт 30%</div>
+    <div style="width:25%;background:var(--good)">Люди 25%</div>
+    <div style="width:15%;background:var(--warn)">Гости 15%</div>
+    <div style="width:12%;background:var(--muted)">Кухня 12%</div>
+    <div style="width:10%;background:var(--bad)">Офферы 10%</div>
+    <div style="width:8%;background:var(--fg)">Места 8%</div>
+  </div>
+  <div class="legend">
+    <div><span class="sw" style="background:var(--accent)"></span><span class="pct">30%</span><span><b>Хит-продукт.</b> Разлом, хруст, тянущийся крем, ASMR без музыки. Цель: охват и сохранения.</span></div>
+    <div><span class="sw" style="background:var(--good)"></span><span class="pct">25%</span><span><b>Люди и скетчи.</b> Команда, пекари, бариста, ситуации у кассы. Цель: репосты и узнаваемость.</span></div>
+    <div><span class="sw" style="background:var(--warn)"></span><span class="pct">15%</span><span><b>Гости.</b> Реакции на первый укус, опросы на улице, репосты отметок. Цель: доверие.</span></div>
+    <div><span class="sw" style="background:var(--muted)"></span><span class="pct">12%</span><span><b>Кухня.</b> Ламинирование теста, сколько масла, ночная смена, выход партии. Цель: доказать свежесть.</span></div>
+    <div><span class="sw" style="background:var(--bad)"></span><span class="pct">10%</span><span><b>Офферы.</b> Новинка месяца, наборы, акции. Цель: продажи.</span></div>
+    <div><span class="sw" style="background:var(--fg)"></span><span class="pct">8%</span><span><b>Места.</b> Seoul Mun ночью, маршрут до точки, атмосфера. Цель: визиты.</span></div>
+  </div>
+  <div class="grid2">
+    <div class="box">
+      <h3>Правила каждого Reels</h3>
+      <ul>
+        <li>Продукт в кадре в первую секунду. Без логотипа-заставки.</li>
+        <li>Текст-крючок на экране до 6 слов.</li>
+        <li>Длина 7–15 секунд для продукта, до 40 секунд для скетча.</li>
+        <li>В конце или в подписи: точка, цена, как заказать.</li>
+        <li>Геометка точки и Collab с Seoul Mun или блогером, где уместно.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Stories каждый день</h3>
+      <ul>
+        <li>«Свежая партия вышла» с временем, 3–4 раза в день.</li>
+        <li>«Осталось 12 Нью-Йорк роллов» вечером: ощущение дефицита.</li>
+        <li>Опрос «Какую начинку завтра?» и выпуск победителя.</li>
+        <li>Репосты отметок гостей с благодарностью.</li>
+        <li>Ссылка-стикер на заказ в каждом продающем сторис.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box col">
+    <h3>Крючки на узбекском и русском</h3>
+    <ul>
+      <li><span class="hook">Bu kruassanni hali tatib ko'rmadingizmi?</span> Вы ещё не пробовали этот круассан?</li>
+      <li><span class="hook">Toshkentda yarim tunda nima yeyish mumkin?</span> Что поесть в Ташкенте в полночь?</li>
+      <li><span class="hook">Narxini topa olasizmi?</span> Угадаете цену?</li>
+      <li><span class="hook">5 daqiqada tugadi</span> Закончилось за 5 минут</li>
+      <li><span class="hook">Звук этого хруста</span> · <span class="hook">Сколько масла в одном круассане</span> · <span class="hook">Мы испекли 1000 роллов за ночь</span></li>
+    </ul>
+    <p class="small muted">Тексты на узбекском лучше проверить носителю в команде: важна живая разговорная интонация.</p>
+  </div>
+</section>
+
+<!-- IDEAS -->
+<section id="ideas">
+  <div class="head"><div class="eyebrow">Банк идей</div><h2>40 идей для Reels и акций</h2></div>
+  <div class="ideas">
+    <div class="box"><h3>Продукт</h3><ul>
+      <li>Разлом Нью-Йорк ролла крупным планом, только звук</li>
+      <li>«Один круассан, 27 слоёв»: макро-съёмка среза</li>
+      <li>Рейтинг начинок от команды: худшая и лучшая</li>
+      <li>Сравнение: круассан из супермаркета против нашего</li>
+      <li>Новинка месяца в формате «тизер → дата → запуск»</li>
+      <li>«Собери свой бокс из 6»: сборка на скорость</li>
+      <li>Круассан-рожок с мороженым при +40 летом</li>
+      <li>Сытный круассан как обед в офис</li></ul></div>
+    <div class="box"><h3>Люди и скетчи</h3><ul>
+      <li>Сериал «Будни пекаря»: 3-минутные эпизоды раз в неделю</li>
+      <li>Когда гость просит «самый свежий»</li>
+      <li>Бариста угадывает заказ по внешности</li>
+      <li>Новичок впервые ламинирует тесто</li>
+      <li>«5 daqiqa qolganda»: закрытие смены</li>
+      <li>Пекарь отвечает на комментарии видео</li>
+      <li>Мама кассира пробует меню</li>
+      <li>Челлендж команды: кто быстрее упакует 10 роллов</li></ul></div>
+    <div class="box"><h3>Гости и улица</h3><ul>
+      <li>Уличный опрос в Seoul Mun: «угадай начинку вслепую»</li>
+      <li>Первый укус: реакции гостей подряд</li>
+      <li>Угощаем таксистов, курьеров, охрану (по мотивам видео с гаишником)</li>
+      <li>«Кто съест 3 ролла за минуту, тому бесплатно»</li>
+      <li>Свидание за 100 000 сум в De'Laska</li>
+      <li>Иностранцы пробуют узбекскую начинку</li>
+      <li>Отзывы на картах, зачитанные пекарем</li>
+      <li>Гость дня: фото у неона и подарок</li></ul></div>
+    <div class="box"><h3>Местный колорит</h3><ul>
+      <li>Круассан с начинкой из каймака или с хасып? Эксперимент с узбекским вкусом</li>
+      <li>Нью-Йорк ролл «Навруз» с сумаляк-кремом (весна)</li>
+      <li>Сахарлик-бокс на Рамадан до полуночи</li>
+      <li>Наборы к выпускным, свадьбам, «бешик-той»</li>
+      <li>Маршрут от метро до точки за 30 секунд</li>
+      <li>Ночной Ташкент: где перекусить после 22:00</li>
+      <li>Утро в Каракамыше: завтраки для района</li>
+      <li>Совместный ролл с соседним брендом в Seoul Mun</li></ul></div>
+    <div class="box"><h3>Акции, которые продают</h3><ul>
+      <li>Кодовое слово из Reels: назови на кассе и получи кофе за полцены</li>
+      <li>Счастливый час 22:00–23:00 на остатки дня</li>
+      <li>Карта лояльности: 6-й круассан в подарок</li>
+      <li>«Отметь нас в сторис» и получи мини-круассан</li>
+      <li>День рождения: ролл в подарок по паспорту</li>
+      <li>Корпоративные завтрак-боксы для офисов с доставкой к 9:00</li>
+      <li>Розыгрыш с партнёром: кофейня, цветочный, кинотеатр</li>
+      <li>Предзаказ на завтра со скидкой через Telegram-бота</li></ul></div>
+  </div>
+</section>
+
+<!-- SALES -->
+<section id="sales">
+  <div class="head"><div class="eyebrow">Воронка</div><h2>Из просмотра в покупку</h2>
+    <p class="col muted">Каждый шаг должен быть измеримым. Без этого не понять, какие Reels продают, а какие только собирают лайки.</p></div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Шаг</th><th>Что делаем</th><th>Чем меряем</th></tr></thead>
+      <tbody>
+        <tr><td>Увидел</td><td>Reels, Collab-публикации, блогеры, реклама на радиус 3 км вокруг точек</td><td>Охват неподписчиков, просмотры</td></tr>
+        <tr><td>Заинтересовался</td><td>Перешёл в профиль, увидел цену, адрес и кнопку заказа</td><td>Посещения профиля, клики по ссылке</td></tr>
+        <tr><td>Написал</td><td>Автоответ на слово «MENYU»/«МЕНЮ» в Direct и комментариях, ответ живого человека за 5 минут</td><td>Количество диалогов, время ответа</td></tr>
+        <tr><td>Купил</td><td>Доставка через бота или агрегатор, самовывоз, визит с кодовым словом</td><td>Заказы с промокодом, кодовые слова на кассе</td></tr>
+        <tr><td>Вернулся</td><td>Telegram-канал с новинками, карта лояльности, просьба об отзыве на Яндекс Картах</td><td>Подписчики канала, повторные покупки, новые отзывы</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid2">
+    <div class="box"><h3>Скрипт ответа в Direct</h3>
+      <p class="small">«Assalomu alaykum! Menyu va narxlar: [ссылка]. Yetkazib berish yoki olib ketish? Qaysi filial yaqinroq?»<br>«Здравствуйте! Меню и цены: [ссылка]. Доставка или самовывоз? Какая точка ближе?»</p>
+      <p class="small muted">Каждый вопрос заканчивается выбором из двух вариантов: так проще довести до заказа.</p></div>
+    <div class="box"><h3>Telegram как второй дом</h3>
+      <ul class="small">
+        <li>Канал: новинки, свежие партии, акции только для подписчиков.</li>
+        <li>Бот: меню, корзина, оплата через Click или Payme, выбор точки.</li>
+        <li>В Instagram регулярно: «В Telegram скидка 10% на предзаказ».</li></ul></div>
+  </div>
+</section>
+
+<!-- ADS -->
+<section id="ads">
+  <div class="head"><div class="eyebrow">Реклама и блогеры</div><h2>Как выйти за пределы своих подписчиков</h2></div>
+  <div class="grid2">
+    <div class="box"><h3>Таргетированная реклама</h3><ul class="small">
+      <li>Продвигать только Reels, которые уже набрали органику выше среднего.</li>
+      <li>Гео: радиус 2–3 км вокруг каждой точки, отдельная кампания на каждую.</li>
+      <li>Цель кампании: посещения профиля или сообщения, а не лайки.</li>
+      <li>Стартовый тест: 2 недели, 3–4 креатива, одинаковый бюджет на каждый. Потом весь бюджет на победителя.</li>
+      <li>Отдельный креатив на узбекском и на русском: сравнить стоимость сообщения.</li></ul></div>
+    <div class="box"><h3>Блогеры</h3><ul class="small">
+      <li>Ставка на микро-блогеров Ташкента с 10–100 тыс. подписчиков: еда, лайфстайл, студенты, мамы.</li>
+      <li>5–8 блогеров в месяц по бартеру или за небольшой гонорар лучше одного крупного.</li>
+      <li>Формат: Collab-публикация, чтобы видео попало и в ленту De'Laska.</li>
+      <li>Каждому блогеру свой промокод: так видно, кто привёл продажи.</li>
+      <li>Сохранять права на видео и использовать их в рекламе.</li></ul></div>
+    <div class="box"><h3>Медиа и карты</h3><ul class="small">
+      <li>Предложить weproject, spot и afisha материал «Нью-Йорк роллы в Ташкенте»: в подборках «где круассаны» бренда сейчас нет.</li>
+      <li>Заполнить карточки в Яндекс Картах и 2ГИС: фото, меню, цены, часы.</li>
+      <li>Цель: 100+ свежих отзывов на каждой точке. QR на столе и на чеке «оцените нас».</li></ul></div>
+    <div class="box"><h3>Офлайн в онлайн</h3><ul class="small">
+      <li>Наклейка на коробке: «Снимите и отметьте @de_laska».</li>
+      <li>Фотозона у неона, подсвеченная вечером.</li>
+      <li>QR на Telegram-бота на каждом столе и пакете.</li>
+      <li>Партнёрство с Seoul Mun: размещение в их соцсетях и на экранах комплекса.</li></ul></div>
+  </div>
+</section>
+
+<!-- KPI -->
+<section id="kpi">
+  <div class="head"><div class="eyebrow">Метрики</div><h2>Что считать каждую неделю</h2>
+    <p class="col muted">Цели в процентах от текущего уровня, потому что исходные цифры аккаунта пока неизвестны. После первой недели замеров их стоит заменить на конкретные числа.</p></div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Метрика</th><th>Где взять</th><th>Цель через 90 дней</th></tr></thead>
+      <tbody>
+        <tr><td>Охват неподписчиков</td><td>Статистика Instagram</td><td>+50% к первой неделе замеров</td></tr>
+        <tr><td>Сохранения и репосты Reels</td><td>Статистика по каждому видео</td><td>Каждое 5-е видео выше среднего вдвое</td></tr>
+        <tr><td>Клики по ссылке в профиле</td><td>Статистика профиля, taplink</td><td>×2</td></tr>
+        <tr><td>Диалоги в Direct</td><td>Счётчик в Direct или CRM</td><td>×2, ответ быстрее 5 минут</td></tr>
+        <tr><td>Продажи по кодовым словам и промокодам</td><td>Касса</td><td>Отдельная строка в отчёте, рост каждый месяц</td></tr>
+        <tr><td>Подписчики Telegram</td><td>Telegram</td><td>10% от аудитории Instagram</td></tr>
+        <tr><td>Отзывы на Яндекс Картах и 2ГИС</td><td>Карточки точек</td><td>100+ на каждую точку, рейтинг 4,8+</td></tr>
+        <tr><td>Выручка по точкам</td><td>Касса</td><td>Сравнить с тем же месяцем прошлого года</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan">
+  <div class="head"><div class="eyebrow">План</div><h2>90 дней по шагам</h2></div>
+  <div class="col">
+    <div class="phase"><div class="when">Дни 1–14</div><ul>
+      <li>Ответы на вопросы ниже, замер стартовых метрик.</li>
+      <li>Новая шапка, хайлайты, закреплённые посты, ссылка на заказ.</li>
+      <li>Ручная проверка конкурентов: подписчики, частота Reels, цены.</li>
+      <li>Шаблон обложки Reels, контент-план на 4 недели.</li>
+      <li>Автоответ на «MENYU/МЕНЮ», скрипт для Direct.</li></ul></div>
+    <div class="phase"><div class="when">Дни 15–45</div><ul>
+      <li>5 Reels в неделю по рубрикам, Stories ежедневно.</li>
+      <li>Первые 5 микро-блогеров с промокодами.</li>
+      <li>Тест таргета на радиус вокруг точек.</li>
+      <li>Запуск Telegram-канала и бота.</li>
+      <li>QR для отзывов на столах и чеках.</li></ul></div>
+    <div class="phase"><div class="when">Дни 46–90</div><ul>
+      <li>Новинка месяца с тизером и запуском.</li>
+      <li>Корпоративные завтрак-боксы для офисов рядом с точками.</li>
+      <li>Партнёрство с Seoul Mun и соседними брендами.</li>
+      <li>Питч в городские медиа.</li>
+      <li>Разбор: какие рубрики и блогеры дали продажи, масштабировать лучшие.</li></ul></div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section id="questions">
+  <div class="head"><div class="eyebrow">Вопросы к владельцу</div><h2>Что нужно узнать, чтобы план стал точным</h2>
+    <p class="col key-note muted">Вопросы, выделенные цветным номером, главные: без них нельзя посчитать бюджет и цели.</p></div>
+  <div class="grid2">
+    <div class="qgroup box"><h3>Цифры и цели</h3><ol>
+      <li class="key">Какая выручка сейчас в месяц по каждой точке и какая цель?</li>
+      <li class="key">Средний чек и сколько чеков в день на каждой точке?</li>
+      <li class="key">Какой бюджет в месяц готовы тратить на рекламу и блогеров?</li>
+      <li>Какая точка самая сильная и какая отстаёт?</li>
+      <li>Какая маржинальность у круассанов, роллов, напитков?</li>
+      <li>Какой срок окупаемости вложений в маркетинг устроит?</li></ol></div>
+    <div class="qgroup box"><h3>Продукт</h3><ol>
+      <li class="key">Какие 3 позиции продаются лучше всего?</li>
+      <li>Что приносит больше прибыли: выпечка, напитки, завтраки, торты?</li>
+      <li>«ПП хлеб» важная часть продаж или осталось от прошлого?</li>
+      <li>Сколько стоит круассан и Нью-Йорк ролл?</li>
+      <li>Как часто выходят новинки? Есть ли сезонное меню?</li>
+      <li>Есть ли производство, способное выдержать рост заказов в 2 раза?</li>
+      <li>Что происходит с непроданной выпечкой вечером?</li></ol></div>
+    <div class="qgroup box"><h3>Гости</h3><ol>
+      <li class="key">Кто покупает чаще всего: возраст, пол, язык общения?</li>
+      <li>Чем отличаются гости Seoul Mun, Бешкайрагача и Каракамыша?</li>
+      <li>В какие часы пик и какие часы провальные?</li>
+      <li>Что гости чаще хвалят и на что жалуются?</li>
+      <li>Сколько гостей приходят повторно?</li></ol></div>
+    <div class="qgroup box"><h3>Каналы продаж</h3><ol>
+      <li class="key">Есть ли доставка? Через какие сервисы и какая её доля в выручке?</li>
+      <li>Сколько заказов приходит через Direct в неделю и кто отвечает?</li>
+      <li>Есть ли Telegram-канал или бот?</li>
+      <li>Есть ли программа лояльности или база телефонов гостей?</li>
+      <li>Есть ли корпоративные клиенты?</li>
+      <li>Как оформлены карточки в Яндекс Картах и 2ГИС, сколько отзывов?</li></ol></div>
+    <div class="qgroup box"><h3>Instagram и команда</h3><ol>
+      <li class="key">Можно ли получить доступ к статистике аккаунта за 90 дней?</li>
+      <li>Кто сейчас снимает и монтирует? Сколько часов в неделю на это есть?</li>
+      <li>Какие 5 видео дали больше всего просмотров и почему, по вашему мнению?</li>
+      <li>Запускали ли таргет раньше? Какие были результаты?</li>
+      <li>С какими блогерами работали, что сработало?</li>
+      <li>Кто такая MAHIRA_ILZAT в хайлайтах: блогер, сотрудник, амбассадор?</li>
+      <li>Готовы ли сотрудники и владелец регулярно появляться в кадре?</li></ol></div>
+    <div class="qgroup box"><h3>Бренд и конкуренты</h3><ol>
+      <li class="key">Каких конкурентов вы сами считаете главными?</li>
+      <li>Почему гости выбирают вас, а не Breadly, Paul или Wien, по вашим словам?</li>
+      <li>Что значит название De'Laska и есть ли история бренда? «Since 2024» на логотипе означает год основания?</li>
+      <li>Планируете ли новые точки и где?</li>
+      <li>Есть ли ограничения: темы, которые нельзя трогать, языки, стиль?</li>
+      <li>Что для вас будет успехом через 3 месяца?</li></ol></div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="head"><div class="eyebrow">Источники</div><h2>Откуда данные</h2></div>
+  <ul class="sources col">
+    <li>Скриншот профиля @de_laska, предоставлен заказчиком, октябрь 2026.</li>
+    <li><a href="https://www.afisha.uz/ru/restaurants/2024/11/05/wien">Afisha: «Первая круассантерия в Узбекистане: обзор Wien»</a>, 2024.</li>
+    <li><a href="https://www.advantour.com/uzbekistan/tashkent/coffee-houses/paul.htm">Advantour: PAUL, Tashkent</a>; <a href="https://www.advantour.com/uzbekistan/tashkent/coffee-houses/breadly.htm">Breadly, Tashkent</a>; <a href="https://www.advantour.com/rus/uzbekistan/tashkent/coffee-houses/bon.htm">Bon!, Ташкент</a>.</li>
+    <li><a href="https://2gis.uz/tashkent/search/%D0%9A%D1%80%D1%83%D0%B0%D1%81%D1%81%D0%B0%D0%BD%D1%8B">2ГИС: «Круассаны в Ташкенте»</a>; <a href="https://2gis.uz/tashkent/search/%D0%9F%D0%B5%D0%BA%D0%B0%D1%80%D0%BD%D0%B8%20%D1%85%D0%BB%D0%B5%D0%B1">2ГИС: «Пекарни хлеб»</a>.</li>
+    <li><a href="https://weproject.media/articles/detail/10-mest-v-tashkente-gde-mozhno-kupit-svezhiy-i-vkusnyy-khleb/">weproject: 10 мест, где купить свежий хлеб</a>; <a href="https://weproject.media/articles/detail/samye-uyutnye-kofeyni-i-pekarni-tashkenta-dlya-osennikh-posidelok/">самые уютные кофейни и пекарни</a>.</li>
+    <li><a href="https://www.goldenpages.uz/company/?Id=85442">Golden Pages: филиалы Safia</a>; <a href="https://safiabakery.uz/en/news/-reglament-uchastiya-v-dne-klienta-s-safia-cakes-">Safia: «День клиента»</a>.</li>
+    <li><a href="https://www.spot.uz/ru/2024/03/06/seoul-mun/">Spot: Seoul Mun</a>.</li>
+    <li><a href="https://napoleoncat.com/stats/instagram-users-in-uzbekistan/2025/08">NapoleonCat: пользователи Instagram в Узбекистане</a>; <a href="https://uz.kursiv.media/2025-11-09/kak-internet-menyaet-uzbekistan-glavnye-czifry-za-2025/">Kursiv: интернет в Узбекистане, цифры 2025</a>; <a href="https://www.uzdaily.uz/ru/telegram-76-okhvata-youtube-no-1-e-commerce-v-roste-kak-ustroen-digital-v-uzbekistane/">UzDaily: Telegram 76% охвата</a>.</li>
+    <li><a href="https://kun.uz/en/news/2025/04/02/uzum-tezkor-named-dominant-digital-platform-in-delivery-market">Kun.uz: Uzum Tezkor признан доминирующим в доставке</a>; <a href="https://www.bento.travel/uzbekistan/food-delivery">Bento: сервисы доставки в Узбекистане</a>.</li>
+  </ul>
+</section>
+
+<footer>
+  Ограничения: статистику аккаунта De'Laska и конкурентов (подписчики, просмотры, вовлечённость) напрямую получить не удалось. Цифры о конкурентах взяты из справочников и обзоров 2024–2026 годов и требуют ручной сверки. Положение на карте позиционирования это экспертная оценка.
+</footer>
+
+</div>
